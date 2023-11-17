@@ -1,0 +1,25 @@
+Package: MethParquet
+Type: Package
+Title: Manipulate and analyze methylation data using Apache Parquet
+Version: 0.1.0
+Authors@R: c( 
+    person("Ziqing", "Wang", email= "zwang14@bidmc.harvard.edu", role = 'aut'),
+    person("Michael", "Cassidy",  role = "aut"),
+    person("Danielle", "Wallace", email= "dclarkson-townsend@bwh.harvard.edu", role = "aut"),
+    person("Tamar", "Sofer", email="tsofer@bidmc.harvard.edu", role = c('aut','cre')))
+Description: MethParquet leverages the columnar format Parquet for efficient DNA methylation data analysis. 
+    Epigenome-wide association analysis, methylation risk score calculation and testing, 
+    as well as CpG subset extraction are streamlined via the Methlist object containing connection 
+    to methylation Parquet directory along with CpG and subject annotation data.
+Depends:
+    tidyverse,
+    dplyr,
+    arrow,
+    limma,
+    nnet,
+    car,
+    GENESIS
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.2.3
