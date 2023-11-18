@@ -53,5 +53,5 @@ extr_chr <- cpg_extract(mlist,select_chr=chr,chr_col='CHR')
 head(extr_chr[[1]])[1:5,1:5]
 head(extr_chr[[2]])
 # Based on row index
-extr_row <- cpg_extract(mlist,row_indices = 1:100,)
+extr_row <- cpg_extract(mlist,row_indices = 1:100)
 }
