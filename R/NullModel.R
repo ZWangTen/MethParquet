@@ -20,7 +20,7 @@
 #' @examples
 #' library(tidyverse)
 #' library(arrow)
-#' library(fitNullModel)
+#' library(GENESIS)
 #' data(phenoData)
 #' data(chrAnnotation)
 #' data(ewas_bmi)
