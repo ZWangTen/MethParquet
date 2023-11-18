@@ -18,12 +18,7 @@
 #' @return A data frame with coefficient estimates for `trait` and testing statistics.
 #' @export
 #' @import dplyr
-#' @import arrow
-#' @import tidyverse
-#' @import GENESIS
-#' @import robustbase
-#' @import nnet
-#' @import car
+#' @importFrom limma mrlm
 #' @examples
 #' data(phenoData)
 #' data(chrAnnotation)

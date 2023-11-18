@@ -26,12 +26,7 @@
 #' `cpg_annot`: CpG annotation file
 #' @export
 #' @import dplyr
-#' @import arrow
-#' @import tidyverse
-#' @import GENESIS
-#' @import robustbase
-#' @import nnet
-#' @import car
+#' @importFrom arrow open_dataset
 #' @examples
 #' data(MethData)
 #' data(phenoData)

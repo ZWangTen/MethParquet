@@ -13,12 +13,6 @@
 #' @return A matrix of methylation risk scores associated to the phenotype for each subject
 #' @export
 #' @import dplyr
-#' @import arrow
-#' @import tidyverse
-#' @import GENESIS
-#' @import robustbase
-#' @import nnet
-#' @import car
 #' @examples
 #'
 #' data(phenoData)

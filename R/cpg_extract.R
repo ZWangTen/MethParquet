@@ -12,12 +12,6 @@
 #' @return Subset of CpG data along with their annotation based on selection criteria
 #' @export
 #' @import dplyr
-#' @import arrow
-#' @import tidyverse
-#' @import GENESIS
-#' @import robustbase
-#' @import nnet
-#' @import car
 #' @examples
 #' data(phenoData)
 #' data(chrAnnotation)

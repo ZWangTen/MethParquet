@@ -16,12 +16,7 @@
 #' and X created based on `covariates_string`.
 #' @export
 #' @import dplyr
-#' @import arrow
-#' @import tidyverse
-#' @import GENESIS
-#' @import robustbase
-#' @import nnet
-#' @import car
+#' @importFrom GENESIS fitNullModel
 #' @examples
 #' data(phenoData)
 #' data(chrAnnotation)

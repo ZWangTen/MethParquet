@@ -16,12 +16,8 @@
 #' For multinomial logistic regression, the list will also contain likelihood ratio test for MRS.
 #' @export
 #' @import dplyr
-#' @import arrow
-#' @import tidyverse
-#' @import GENESIS
-#' @import robustbase
-#' @import nnet
-#' @import car
+#' @importFrom nnet multinom
+#' @importFrom car Anova
 #' @examples
 #' data(phenoData)
 #' data(chrAnnotation)
