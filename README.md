@@ -13,7 +13,7 @@ to methylation Parquet directory along with CpG and subject annotation
 data.
 
 <img
-src="/Users/zwang4/Library/CloudStorage/OneDrive-BethIsraelLaheyHealth/2023_parquet_db_methylation/2023_Files_Leslie_ZW/Code/MethParquet/man/Figure/MethParquet.png"
+src="https://github.com/ZWangTen/MethParquet/blob/main/man/Figure/MethParquet.png"
 width="700" height="580" />
 
 ## Installation
