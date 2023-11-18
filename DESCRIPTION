@@ -12,7 +12,7 @@ Description: MethParquet leverages the columnar format Parquet for efficient DNA
     as well as CpG subset extraction are streamlined via the Methlist object containing connection 
     to methylation Parquet directory along with CpG and subject annotation data.
 Imports:
-    dplyr,
+    tidyverse,
     arrow,
     limma,
     nnet,

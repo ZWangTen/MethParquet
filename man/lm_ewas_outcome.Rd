@@ -48,6 +48,8 @@ lm_ewas_outcome performs association analysis with linear regression
 using methylation as the outcome.
 }
 \examples{
+library(tidyverse)
+library(arrow)
 data(phenoData)
 data(chrAnnotation)
 data(ewas_bmi)

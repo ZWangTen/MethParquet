@@ -16,8 +16,10 @@
 #'
 #' @return A data frame with coefficient estimates for CpGs as exposure and testing statistics.
 #' @export
-#' @import dplyr
+#' @import tidyverse
 #' @examples
+#' library(tidyverse)
+#' library(arrow)
 #' data(phenoData)
 #' data(chrAnnotation)
 #' data(ewas_bmi)

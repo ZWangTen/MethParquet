@@ -36,6 +36,8 @@ Subset of CpG data along with their annotation based on selection criteria
 cpg_extract extracts subset of CpG methylation data based on argument provided
 }
 \examples{
+library(tidyverse)
+library(arrow)
 data(phenoData)
 data(chrAnnotation)
 data(ewas_bmi)

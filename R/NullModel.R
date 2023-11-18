@@ -15,9 +15,12 @@
 #' @return A list containing fitted null model, X and Y matrices, where Y is the phenotypic trait
 #' and X created based on `covariates_string`.
 #' @export
-#' @import dplyr
+#' @import tidyverse
 #' @importFrom GENESIS fitNullModel
 #' @examples
+#' library(tidyverse)
+#' library(arrow)
+#' library(fitNullModel)
 #' data(phenoData)
 #' data(chrAnnotation)
 #' data(ewas_bmi)

@@ -17,9 +17,12 @@
 #'
 #' @return A data frame with coefficient estimates for `trait` and testing statistics.
 #' @export
-#' @import dplyr
+#' @import tidyverse
 #' @importFrom limma mrlm
 #' @examples
+#' library(tidyverse)
+#' library(arrow)
+#' library(limma)
 #' data(phenoData)
 #' data(chrAnnotation)
 #' data(ewas_bmi)

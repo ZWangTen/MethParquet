@@ -38,6 +38,9 @@ specified by covariance matrices (See \code{\link[GENESIS]{fitNullModel}}) such 
 The output of NullModel can be passed to ewas_meth_exposure for association testing.
 }
 \examples{
+library(tidyverse)
+library(arrow)
+library(fitNullModel)
 data(phenoData)
 data(chrAnnotation)
 data(ewas_bmi)

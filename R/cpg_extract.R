@@ -11,8 +11,10 @@
 #'
 #' @return Subset of CpG data along with their annotation based on selection criteria
 #' @export
-#' @import dplyr
+#' @import tidyverse
 #' @examples
+#' library(tidyverse)
+#' library(arrow)
 #' data(phenoData)
 #' data(chrAnnotation)
 #' data(ewas_bmi)

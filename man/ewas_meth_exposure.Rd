@@ -45,6 +45,8 @@ ewas_meth_exposure computes association analysis for each CpG site using the nul
 fitted by function \code{\link{NullModel}}
 }
 \examples{
+library(tidyverse)
+library(arrow)
 data(phenoData)
 data(chrAnnotation)
 data(ewas_bmi)

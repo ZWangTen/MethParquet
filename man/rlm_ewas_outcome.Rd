@@ -48,6 +48,9 @@ rlm_ewas_outcome performs association analysis with robust linear regression
 using methylation as the outcome.
 }
 \examples{
+library(tidyverse)
+library(arrow)
+library(limma)
 data(phenoData)
 data(chrAnnotation)
 data(ewas_bmi)

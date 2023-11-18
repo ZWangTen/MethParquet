@@ -37,7 +37,8 @@ dev_meth_score calculates Methylation Risk Score as a weighted sum of an individ
 DNA methylation values and pre-calculated weights associated with a specific phenotype.
 }
 \examples{
-
+library(tidyverse)
+library(arrow)
 data(phenoData)
 data(chrAnnotation)
 data(ewas_bmi)

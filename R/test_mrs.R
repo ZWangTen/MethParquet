@@ -15,10 +15,14 @@
 #' A list containing fitted model and coefficients estimates of methylation risk score (MRS).
 #' For multinomial logistic regression, the list will also contain likelihood ratio test for MRS.
 #' @export
-#' @import dplyr
+#' @import tidyverse
 #' @importFrom nnet multinom
 #' @importFrom car Anova
 #' @examples
+#' library(tidyverse)
+#' library(arrow)
+#' library(nnet)
+#' library(car)
 #' data(phenoData)
 #' data(chrAnnotation)
 #' data(ewas_bmi)

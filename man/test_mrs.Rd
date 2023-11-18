@@ -29,6 +29,10 @@ For multinomial logistic regression, the list will also contain likelihood ratio
 Test Methylation Risk Score against a phenotype chosen
 }
 \examples{
+library(tidyverse)
+library(arrow)
+library(nnet)
+library(car)
 data(phenoData)
 data(chrAnnotation)
 data(ewas_bmi)

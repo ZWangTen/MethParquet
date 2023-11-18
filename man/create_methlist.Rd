@@ -55,6 +55,8 @@ A `MethList` object which contains:
 Create Methlist
 }
 \examples{
+library(tidyverse)
+library(arrow)
 data(MethData)
 data(phenoData)
 data(chrAnnotation)

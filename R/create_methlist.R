@@ -25,9 +25,11 @@
 #' `subject_annot`: subject annotation file
 #' `cpg_annot`: CpG annotation file
 #' @export
-#' @import dplyr
+#' @import tidyverse
 #' @importFrom arrow open_dataset
 #' @examples
+#' library(tidyverse)
+#' library(arrow)
 #' data(MethData)
 #' data(phenoData)
 #' data(chrAnnotation)
