@@ -40,7 +40,7 @@ The output of NullModel can be passed to ewas_meth_exposure for association test
 \examples{
 library(tidyverse)
 library(arrow)
-library(fitNullModel)
+library(GENESIS)
 data(phenoData)
 data(chrAnnotation)
 data(ewas_bmi)
