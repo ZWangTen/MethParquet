@@ -18,7 +18,7 @@
 #' @return A data frame with coefficient estimates for `trait` and testing statistics.
 #' @export
 #' @import tidyverse
-#' @importFrom limma mrlm
+#' @importFrom limma lmFit
 #' @examples
 #' library(tidyverse)
 #' library(arrow)
@@ -80,7 +80,7 @@ rlm_ewas_outcome <- function(db_obj, trait, select_sites='full',select_chr=FALSE
     }
     # Numeric trait
     if (!class(pheno[,trait])%in%c('character','factor')) {
-      rl <- suppressWarnings(mrlm(db_CpG,design=XX,method='robust'))
+      rl <- suppressWarnings(lmFit(db_CpG,design=XX,method='robust'))
       sigma <- rl$sigma
       df_res <- rl$df.residual
       coef <- rl$coefficients
@@ -93,7 +93,7 @@ rlm_ewas_outcome <- function(db_obj, trait, select_sites='full',select_chr=FALSE
       res<- res %>% mutate(fdr_bh= p.adjust(p_value, method = "BH"))
       return(res)
     } else { # Categorical trait
-      rl_full <- suppressWarnings(mrlm(db_CpG,design=XX,method='robust'))
+      rl_full <- suppressWarnings(lmFit(db_CpG,design=XX,method='robust'))
       b_full <- rl_full$coefficients
       # Calculate sums of squares residual
       ss_res_full <- colSums((t(db_CpG)-XX %*% t(b_full))^2)
@@ -105,7 +105,7 @@ rlm_ewas_outcome <- function(db_obj, trait, select_sites='full',select_chr=FALSE
         XX2 <- model.matrix(as.formula(paste('~',1)),data=pheno)
       }
       XX2 <- as.matrix(XX2[rownames(XX),])
-      rl_res <- suppressWarnings(mrlm(db_CpG,design=XX2,method='robust'))
+      rl_res <- suppressWarnings(lmFit(db_CpG,design=XX2,method='robust'))
       b_red <- rl_res$coefficients
       ss_res_red <- colSums((t(db_CpG)-XX2 %*% t(b_red))^2)
       # F test
