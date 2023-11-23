@@ -69,7 +69,7 @@ flex_ewas <- function(db_obj,fun,phen=NULL,select_sites='full',select_chr=FALSE,
     stop("Please specify only one argument at a time")
   }
 
-  db_CpG <- db%>%filter(CpG %in% cpg_list) %>% as.data.frame() %>%
+  db_CpG <- db%>%filter(CpG %in% CpG_test$CpG) %>% as.data.frame() %>%
     dplyr::select(-CHR) %>% column_to_rownames(var='CpG') %>% as.matrix()
   if(NAs_to_zero) {
     db_CpG[is.na(db_CpG)] <- 0
