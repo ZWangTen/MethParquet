@@ -12,7 +12,7 @@
 #' @param gene_col Column for gene names in the CpG annotation data from `Methlist`.
 #' @param covariates_string Columns for covariates to adjust in model from `subject_annot` of `MethList`.
 #' @param out_position Column name for CpG position in chromosome from `cpg_annot` of `MethList`.
-#'  If given, output will contain columns for CpG position and chromosome number.
+#'  If given, output will contain these columns and chromosome number.
 #' @param NAs_to_zero Convert missing values to 0 in methylation data. Default: `FALSE`.
 #' @param block_size Integer to specify number of CpGs in each iteration block. Default: 50,000.
 #'
@@ -24,7 +24,6 @@
 #' library(arrow)
 #' data(phenoData)
 #' data(chrAnnotation)
-#' data(ewas_bmi)
 #' wdir <- getwd()
 #' path <- paste0(wdir,'/data/Parquet_Directory')
 #'

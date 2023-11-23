@@ -34,7 +34,7 @@ Only one selection for CpG is allowed, `sites`, `chromosome`, or `gene`.}
 \item{covariates_string}{Columns for covariates to adjust in model from `subject_annot` of `MethList`.}
 
 \item{out_position}{Column name for CpG position in chromosome from `cpg_annot` of `MethList`.
-If given, output will contain columns for CpG position and chromosome number.}
+If given, output will contain these columns and chromosome number.}
 
 \item{NAs_to_zero}{Convert missing values to 0 in methylation data. Default: `FALSE`.}
 
@@ -52,7 +52,6 @@ library(tidyverse)
 library(arrow)
 data(phenoData)
 data(chrAnnotation)
-data(ewas_bmi)
 wdir <- getwd()
 path <- paste0(wdir,'/data/Parquet_Directory')
 

@@ -43,7 +43,6 @@ library(arrow)
 library(GENESIS)
 data(phenoData)
 data(chrAnnotation)
-data(ewas_bmi)
 wdir <- getwd()
 path <- paste0(wdir,'/data/Parquet_Directory')
 
