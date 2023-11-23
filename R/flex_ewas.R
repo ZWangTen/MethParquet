@@ -1,4 +1,6 @@
 #' Flexible implementation of association functions on methylation data
+#' @description `flex_ewas` takes another regression function as input to test association between
+#' each CpG site and the phenotype defined in the regression model
 #'
 #' @param db_obj MethList created using \code{\link{create_methlist}}.
 #' @param fun A regression function applied to each CpG site

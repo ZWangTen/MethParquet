@@ -43,7 +43,8 @@ If given, output will contain these columns and chromosome number.}
 A data frame with results obtained using `fun`.
 }
 \description{
-Flexible implementation of association functions on methylation data
+`flex_ewas` takes another regression function as input to test association between
+each CpG site and the phenotype defined in the regression model
 }
 \examples{
 library(tidyverse)
