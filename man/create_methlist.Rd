@@ -2,7 +2,7 @@
 % Please edit documentation in R/create_methlist.R
 \name{create_methlist}
 \alias{create_methlist}
-\title{Create Methlist}
+\title{Create MethList}
 \usage{
 create_methlist(
   db_path,
@@ -52,7 +52,8 @@ A `MethList` object which contains:
 `cpg_annot`: CpG annotation file
 }
 \description{
-Create Methlist
+create_methlist creates the MethList object containing connection to parquet database,
+and the annotation for CpGs and samples in data.frame.
 }
 \examples{
 library(tidyverse)

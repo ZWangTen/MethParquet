@@ -1,5 +1,7 @@
 
-#' Create Methlist
+#' Create MethList
+#' @description create_methlist creates the MethList object containing connection to parquet database,
+#' and the annotation for CpGs and samples in data.frame.
 #'
 #' @param db_path Filepath to a methylation parquet database. Should contain a column named 'CpG'
 #' for CpG site names

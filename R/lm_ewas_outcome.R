@@ -154,7 +154,7 @@ lm_ewas_outcome <-function(db_obj, trait, select_sites='full',select_chr=FALSE,
   }
   if (!isFALSE(out_position)) {
     chr_dat <- db_obj$cpg_annot
-    res <- merge(res,chr_dat[,c('CpG',out_position)])
+    res <- merge(res,chr_dat[,c('CpG','CHR',out_position)])
   }
   return(res)
 }

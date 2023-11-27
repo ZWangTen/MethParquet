@@ -60,8 +60,8 @@ ewas_meth_exposure <- function(db_obj,m_null,select_sites='full',select_chr=FALS
       db_CpG[is.na(db_CpG)] <- 0
     }
     if(length(class(mod_n)) ==1) {
-      if (class(mod_n)=='GENESIS.nullModel') {
-        C <- mod_n$cholSigmaInv
+      if (grepl('GENESIS', class(mod_n), fixed = TRUE)==TRUE) {
+        C <- unique(diag(mod_n$cholSigmaInv))
         CX <- mod_n$CX
         CXCXI <- mod_n$CXCXI
       } else {
@@ -72,7 +72,7 @@ ewas_meth_exposure <- function(db_obj,m_null,select_sites='full',select_chr=FALS
       qrmod <- base::qr(CX)
       Ytilde <- base::qr.resid(qrmod, as.matrix(C*Y)) #Ytilde <- CY - tcrossprod(CXCXI, crossprod(CY, CX))
       resid <- C*Ytilde  #resid <- m.null$residuals*C^2
-      CG <- apply(db_CpG,2,function(i){C*i})
+      CG <- base::apply(db_CpG,2,function(i){C*i})
       Gtilde <- CG - tcrossprod(CXCXI, crossprod(CG, CX))
       GPG <- colSums(Gtilde^2)
       score_SE <- sqrt(GPG)
