@@ -3,6 +3,8 @@ title: "Methylation Association Analysis using MethParquet"
 output: 
   rmarkdown::html_vignette:
     toc: true
+    fig_width: 6
+    fig_height: 4
 date: "`r Sys.Date()`"
 vignette: >
   %\VignetteIndexEntry{Methylation Association Analysis using MethParquet}
@@ -30,6 +32,7 @@ library(arrow)
 library(tidyverse)
 library(limma)
 library(GENESIS)
+library(knitr)
 ```
 
 ### Create Parquet database and MethList object
@@ -41,7 +44,7 @@ library(GENESIS)
 data(phenoData)
 data(chrAnnotation)
 data(MethData)
-head(MethData,c(3L,5L))
+kable(head(MethData,c(3L,5L)))
 ```
 
 Create Parquet database in `path` where the methylation data is partitioned by chromosome.
@@ -73,7 +76,7 @@ Here we illustrate an example of simple linear regression, with the other assumi
 
 ```{r}
 ewas_lm <- lm_ewas_outcome(db_obj=mlist,trait='bmi',covariates_string = c('age','sex'),out_position='MAPINFO')
-head(ewas_lm)
+kable(head(ewas_lm))
 ```
 
 As aforementioned, by specifying the CpG position in chromosome (`MAPINFO`), the output can be easily channeld to construct visualization plots. 
@@ -105,7 +108,7 @@ row.names(kinship) <- phenoData$sample_id
 colnames(kinship) <- row.names(kinship)
 # Make the matrix positive definite
 kinship <- cor.smooth(as.matrix(kinship))
-kinship[1:4,1:4]
+kable(kinship[1:4,1:4])
 ```
 
 Now fit the null model with `age and `sex` as fixed and kinship matrix as random effect.
@@ -121,7 +124,7 @@ Run association tests with fitted null model on chromosome 1-5.
 ```{r}
 chr <- as.character(seq(from=1,to=5))
 mixed=ewas_meth_exposure(db_obj=mlist,m.null,select_sites = FALSE,select_chr = chr, out_position=c('MAPINFO','Gene'))
-head(mixed)
+kable(head(mixed))
 ```
 
 Users have great flexibility in customizing visualization. For instance, with gene name listed in the output, one can plot the CpG sites with gene as label using ggplot2. The CpGs on the top would be those with lowest p-values.
@@ -143,6 +146,6 @@ rlm_function <- function(x) {
 }
 
 flex_rlm <- flex_ewas(mlist,rlm_function,out_position = c('MAPINFO','Gene'))
-head(flex_rlm)
+kable(head(flex_rlm))
 ```
 
