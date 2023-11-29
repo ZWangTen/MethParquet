@@ -60,7 +60,6 @@ subject_col_keep='all',cpgAnnot_col_keep=c(1:2,12:13,16),cpg_annot = chrAnnotati
 subject_id='sample_id',cpg_col_annot='Name', gene_col_name = 'UCSC_RefGene_Name')
 
 # Create a robust linear regression function with methylation as exposure
-covariates_string = c('age','sex')
 rlm_function <- function(x) {
 mod <- base::suppressWarnings(MASS::rlm(as.formula(paste('height', "~x+", 'age')), data = phenoData))
 return(summary(mod)$coefficients[2,])

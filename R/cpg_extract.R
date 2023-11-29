@@ -60,7 +60,7 @@ cpg_extract <- function(db_obj, gene_list=FALSE,gene_col=FALSE, select_chr=FALSE
   } else if (isTRUE(all(site_names!=FALSE))) {
     gene_annot <- annot %>% filter(CpG%in%site_names)
     CpGs <- db %>% filter(CpG %in% gene_annot$CpG) %>% as.data.frame()
-    res<-list(cpg_data=CpGs,cpg_annotation=annot2)
+    res<-list(cpg_data=CpGs,cpg_annotation=gene_annot)
   } else if (all(row_indices)!=FALSE) {
     CpGs <- db %>% as.data.frame() %>% rownames_to_column(var = "row") %>% filter(row %in% row_indices)
     gene_annot <- annot %>% filter(CpG%in%CpGs$CpG)
