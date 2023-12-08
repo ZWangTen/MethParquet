@@ -36,7 +36,7 @@
 #' data(phenoData)
 #' data(chrAnnotation)
 #' wdir <- getwd()
-#' path <- paste0(wdir,'/data/Parquet_Directory')
+#' path <- paste0(wdir,'/Parquet_Directory')
 #'
 #' # Create Parquet data in 'path'
 #' MethData %>% group_by(CHR) %>% arrow::write_dataset(path,format = "parquet")
@@ -46,6 +46,7 @@
 #' subject_col_keep='all',cpgAnnot_col_keep=c(1:2,12:13,16),cpg_annot = chrAnnotation,
 #' subject_id='sample_id',cpg_col_annot='Name', gene_col_name = 'UCSC_RefGene_Name')
 #' names(mlist)
+#' unlink(path,recursive=TRUE)
 
 
 create_methlist <- function(db_path, cpg_col_db, subject_annot, subject_col_keep='all',

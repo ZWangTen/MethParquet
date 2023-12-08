@@ -22,10 +22,13 @@
 #' library(arrow)
 #' data(phenoData)
 #' data(chrAnnotation)
+#' data(MethData)
 #' wdir <- getwd()
-#' path <- paste0(wdir,'/data/Parquet_Directory')
+#' path <- paste0(wdir,'/Parquet_Directory')
 #'
-#' # Create MethList
+#' # Create Parquet data in 'path' and MethList
+#' MethData %>% group_by(CHR) %>% arrow::write_dataset(path,format = "parquet")
+#'
 #' mlist <- create_methlist(db_path = path,cpg_col_db='CpG',subject_annot = phenoData,
 #' subject_col_keep='all',cpgAnnot_col_keep=c(1:2,12:13,16),cpg_annot = chrAnnotation,
 #' subject_id='sample_id',cpg_col_annot='Name', gene_col_name = 'UCSC_RefGene_Name')
@@ -39,6 +42,7 @@
 #' # Run flex_ewas
 #' flex_rlm <- flex_ewas(mlist,rlm_function,out_position = c('MAPINFO','Gene'))
 #' head(flex_rlm)
+#' unlink(path,recursive=TRUE)
 
 flex_ewas <- function(db_obj,fun,phen=NULL,select_sites='full',select_chr=FALSE,gene_list=FALSE,
                       gene_col=FALSE,out_position=FALSE,block_size=50000,NAs_to_zero=FALSE){

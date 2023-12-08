@@ -23,12 +23,15 @@
 #' library(tidyverse)
 #' library(arrow)
 #' library(limma)
+#' data(MethData)
 #' data(phenoData)
 #' data(chrAnnotation)
 #' wdir <- getwd()
-#' path <- paste0(wdir,'/data/Parquet_Directory')
+#' path <- paste0(wdir,'/Parquet_Directory')
 #'
-#' # Create MethList
+#' # Create Parquet data in 'path' and MethList
+#' MethData %>% group_by(CHR) %>% arrow::write_dataset(path,format = "parquet")
+#'
 #' mlist <- create_methlist(db_path = path,cpg_col_db='CpG',subject_annot = phenoData,
 #' subject_col_keep='all',cpgAnnot_col_keep=c(1:2,12:13,16),cpg_annot = chrAnnotation,
 #' subject_id='sample_id',cpg_col_annot='Name', gene_col_name = 'UCSC_RefGene_Name')
@@ -36,6 +39,7 @@
 #' ewas_rlm <- rlm_ewas_outcome(db_obj=mlist,trait='disease',select_sites=FALSE,gene_list=FALSE,
 #' select_chr=c('1','2','21'),covariates_string = c('age','sex'),out_position='MAPINFO')
 #' head(ewas_rlm)
+#' unlink(path,recursive=TRUE)
 
 rlm_ewas_outcome <- function(db_obj, trait, select_sites='full',select_chr=FALSE,
                              gene_list=FALSE,gene_col=FALSE, covariates_string,

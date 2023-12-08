@@ -41,10 +41,13 @@ library(arrow)
 data(phenoData)
 data(chrAnnotation)
 data(ewas_bmi)
+data(MethData)
 wdir <- getwd()
-path <- paste0(wdir,'/data/Parquet_Directory')
+path <- paste0(wdir,'/Parquet_Directory')
 
-# Create MethList
+# Create Parquet data in 'path' and MethList
+MethData \%>\% group_by(CHR) \%>\% arrow::write_dataset(path,format = "parquet")
+
 mlist <- create_methlist(db_path = path,cpg_col_db='CpG',subject_annot = phenoData,
 subject_col_keep='all',cpgAnnot_col_keep=c(1:2,12:13,16),cpg_annot = chrAnnotation,
 subject_id='sample_id',cpg_col_annot='Name', gene_col_name = 'UCSC_RefGene_Name')
@@ -56,4 +59,5 @@ head(extr_chr[[1]])[1:5,1:5]
 head(extr_chr[[2]])
 # Based on row index
 extr_row <- cpg_extract(mlist,row_indices = 1:100)
+unlink(path,recursive=TRUE)
 }
