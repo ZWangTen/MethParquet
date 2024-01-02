@@ -65,7 +65,7 @@ ewas_meth_exposure <- function(db_obj,m_null,select_sites='full',select_chr=FALS
     }
     if(length(class(mod_n)) ==1) {
       if (grepl('GENESIS', class(mod_n), fixed = TRUE)==TRUE) {
-        C <- unique(diag(mod_n$cholSigmaInv))
+        C <- unique(diag(as.matrix(mod_n$cholSigmaInv)))
         CX <- mod_n$CX
         CXCXI <- mod_n$CXCXI
       } else {
