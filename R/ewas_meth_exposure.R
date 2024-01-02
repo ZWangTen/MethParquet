@@ -76,7 +76,7 @@ ewas_meth_exposure <- function(db_obj,m_null,select_sites='full',select_chr=FALS
       qrmod <- base::qr(CX)
       Ytilde <- base::qr.resid(qrmod, as.matrix(C*Y)) #Ytilde <- CY - tcrossprod(CXCXI, crossprod(CY, CX))
       resid <- C*Ytilde  #resid <- m.null$residuals*C^2
-      CG <- base::apply(db_CpG,2,function(i){C*i})
+      CG <- suppressWarnings(base::apply(db_CpG,2,function(i){C*i}))
       Gtilde <- CG - tcrossprod(CXCXI, crossprod(CG, CX))
       GPG <- colSums(Gtilde^2)
       score_SE <- sqrt(GPG)
