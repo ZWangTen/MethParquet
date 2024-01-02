@@ -66,8 +66,8 @@ ewas_meth_exposure <- function(db_obj,m_null,select_sites='full',select_chr=FALS
     if(length(class(mod_n)) ==1) {
       if (grepl('GENESIS', class(mod_n), fixed = TRUE)==TRUE) {
         C <- unique(diag(as.matrix(mod_n$cholSigmaInv)))
-        CX <- mod_n$CX
-        CXCXI <- mod_n$CXCXI
+        CX <- as.matrix(mod_n$CX)
+        CXCXI <- as.matrix(mod_n$CXCXI)
       } else {
         C <- as.numeric(chol(chol2inv(summary(mod_n)$sigma)))
         CX <- C*X
@@ -77,10 +77,10 @@ ewas_meth_exposure <- function(db_obj,m_null,select_sites='full',select_chr=FALS
       Ytilde <- base::qr.resid(qrmod, as.matrix(C*Y)) #Ytilde <- CY - tcrossprod(CXCXI, crossprod(CY, CX))
       resid <- C*Ytilde  #resid <- m.null$residuals*C^2
       CG <- suppressWarnings(base::apply(db_CpG,2,function(i){C*i}))
-      Gtilde <- CG - tcrossprod(CXCXI, crossprod(CG, CX))
+      Gtilde <- CG - base::tcrossprod(CXCXI, base::crossprod(CG, CX))
       GPG <- colSums(Gtilde^2)
       score_SE <- sqrt(GPG)
-      score <- as.vector(crossprod(db_CpG, resid))
+      score <- as.vector(base::crossprod(db_CpG, resid))
       Stat <- score/score_SE # t-value
       Score_pval = pchisq(Stat^2, df = 1, lower.tail = FALSE)
       Estimate=score/GPG
