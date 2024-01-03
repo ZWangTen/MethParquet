@@ -65,27 +65,34 @@ ewas_meth_exposure <- function(db_obj,m_null,select_sites='full',select_chr=FALS
     }
     if(length(class(mod_n)) ==1) {
       if (grepl('GENESIS', class(mod_n), fixed = TRUE)==TRUE) {
-        C <- unique(diag(as.matrix(mod_n$cholSigmaInv)))
-        CX <- as.matrix(mod_n$CX)
-        CXCXI <- as.matrix(mod_n$CXCXI)
+        C <- mod_n$cholSigmaInv
+        CX <- mod_n$CX
+        CXCXI <- mod_n$CXCXI
+        CG<- crossprod(C, db_CpG)
+        CY <- crossprod(C, Y)
+        qrmod <- base::qr(CX)
+        Ytilde <- CY - tcrossprod(CXCXI, crossprod(CY, CX))
+        resid <- C %*% Ytilde
       } else {
         C <- as.numeric(chol(chol2inv(summary(mod_n)$sigma)))
         CX <- C*X
         CXCXI <- tcrossprod(CX, chol2inv(chol(crossprod(CX))))
+        CG<-C*db_CpG   #CG <- suppressWarnings(base::apply(db_CpG,2,function(i){C*i}))
+        CY <- C*Y
+        qrmod <- base::qr(CX)
+        Ytilde <- CY - tcrossprod(CXCXI, crossprod(CY, CX))
+        resid <- C*Ytilde
       }
-      qrmod <- base::qr(CX)
-      Ytilde <- base::qr.resid(qrmod, as.matrix(C*Y)) #Ytilde <- CY - tcrossprod(CXCXI, crossprod(CY, CX))
-      resid <- C*Ytilde  #resid <- m.null$residuals*C^2
-      CG <- suppressWarnings(base::apply(db_CpG,2,function(i){C*i}))
-      Gtilde <- CG - base::tcrossprod(CXCXI, base::crossprod(CG, CX))
+      Gtilde <- CG - tcrossprod(as.matrix(CXCXI), base::crossprod(as.matrix(CG), as.matrix(CX)))
       GPG <- colSums(Gtilde^2)
       score_SE <- sqrt(GPG)
-      score <- as.vector(base::crossprod(db_CpG, resid))
+      score <- as.vector(crossprod(db_CpG, resid))
       Stat <- score/score_SE # t-value
       Score_pval = pchisq(Stat^2, df = 1, lower.tail = FALSE)
       Estimate=score/GPG
       #Est.SE = 1/score.SE,
-      res <- data.frame(CpG = colnames(db_CpG),Estimate = Estimate, Score = Stat,p_value = Score_pval) #
+      res <- data.frame(CpG = colnames(db_CpG),Estimate = Estimate, Score = score, Score.Stat = Stat,
+                        p_value = Score_pval) #
       rownames(res)<-NULL
       res<- res %>% mutate(fdr_bh= p.adjust(p_value, method = "BH"))
       return(res)
