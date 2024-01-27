@@ -17,7 +17,10 @@ Imports:
     limma,
     nnet,
     car,
-    GENESIS
+    GENESIS,
+    qqman,
+    CMplot,
+    psych
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
