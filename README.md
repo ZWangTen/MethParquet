@@ -34,7 +34,7 @@ BiocManager::install("GENESIS")
 devtools::install_github("ZWangTen/MethParquet",build_vignettes = TRUE)
 
 # To view Vignette for association analysis
-browseVignettes('Methparquet')
+browseVignettes('MethParquet')
 ```
 
 ## Citation
