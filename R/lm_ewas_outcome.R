@@ -15,10 +15,15 @@
 #'  If given, output will contain these columns and chromosome number.
 #' @param NAs_to_zero Convert missing values to 0 in methylation data. Default: `FALSE`.
 #' @param block_size Integer to specify number of CpGs in each iteration block. Default: 50,000.
+#' @param cores Number of cores used for parallel processing (forking). For details please see
+#' \code{\link[future]{plan}}.  Default: 1 (no parallel processing).
 #'
 #' @return A data frame with coefficient estimates for `trait` and testing statistics.
 #' @export
-#' @import tidyverse
+#' @import tidyverse Rcpp furrr future RcppEigen
+#' @importFrom Rcpp sourceCpp
+#' @useDynLib MethParquet
+#' @exportPattern "^[[:alpha:]]+"
 #' @examples
 #' library(tidyverse)
 #' library(arrow)
@@ -42,8 +47,8 @@
 #' unlink(path,recursive=TRUE)
 
 lm_ewas_outcome <-function(db_obj, trait, select_sites='full',select_chr=FALSE,
-                           gene_list=FALSE,gene_col=FALSE, covariates_string,
-                           out_position=FALSE, NAs_to_zero=FALSE, block_size=50000){
+                             gene_list=FALSE,gene_col=FALSE, covariates_string, parallel=FALSE,
+                             out_position=FALSE, NAs_to_zero=FALSE, block_size=50000){
   db <- db_obj$db
   pheno <- db_obj$subject_annot
   chr_dat <- db_obj$cpg_annot
@@ -65,34 +70,20 @@ lm_ewas_outcome <-function(db_obj, trait, select_sites='full',select_chr=FALSE,
 
     if (!class(pheno[,trait])%in%c('character','factor')) {
       # β = [(Xt*X)^−1]*Xt*y
-      XtXinv <- solve(t(XX) %*% XX)
-      XtXinv_se_arg <- sqrt(XtXinv[trait,trait])
-      numExplan <-ncol(XX)
+      n.trait<-which(colnames(XX)==trait)-1
+      lm.b <- calculateBetasAndSE(XX, db_CpG, n.trait)
 
-      XXproj <- XtXinv %*% t(XX)
-      betas_mat <- XXproj %*% db_CpG
-      betas <- betas_mat[trait,]
-
-      resid_Ys <- db_CpG - XX %*% XXproj %*% db_CpG
-      sum_squares_resids <- colSums(resid_Ys^2)
-      sigmas_square <- sum_squares_resids/(nrow(db_CpG)-numExplan)
-      se_betas <- sqrt(sigmas_square)*XtXinv_se_arg
-      sebetas = sqrt((1 / (nrow(XX) - 2)) * sum_squares_resids / sum((XX - mean(XX)) ^ 2))
-
-      test_stats <- betas/se_betas
-      t_stat_df <- nrow(db_CpG) - numExplan
+      test_stats <- lm.b$betas/lm.b$se_betas
+      t_stat_df <- nrow(db_CpG) - ncol(XX)
       t_pval <- 2*pt(abs(test_stats), lower.tail=FALSE, df = t_stat_df)
-      res <- data.frame(CpG = colnames(db_CpG), estimate = betas, se = se_betas,
+      res <- data.frame(CpG = colnames(db_CpG), estimate = lm.b$betas, se = lm.b$se_betas,
                         t_stat = test_stats,t_stat_df=t_stat_df, p_value = t_pval)
 
       rownames(res)<-NULL
-
-      res<- res %>% mutate(fdr_bh= p.adjust(p_value, method = "BH"))
       return(res)
     } else {          # Categorical trait
-      b_full<-solve(t(XX)%*%XX)%*%t(XX)%*%db_CpG
-      # Calculate sums of squares residual
-      ss_res_full <- colSums((db_CpG-XX %*% b_full)^2)
+      ss_res_full <- solveAndCalculateResiduals(XX, db_CpG)
+
       # reduced model
       if (isFALSE(covariates_string)==F){
         model_string2 <- paste(c(covariates_string),collapse="+")
@@ -101,8 +92,8 @@ lm_ewas_outcome <-function(db_obj, trait, select_sites='full',select_chr=FALSE,
         XX2 <- model.matrix(as.formula(paste('~',1)),data=pheno)
       }
       XX2 <- as.matrix(XX2[rownames(XX),])
-      b_red<-solve(t(XX2)%*%XX2)%*%t(XX2)%*%db_CpG
-      ss_res_red <- colSums((db_CpG-XX2 %*% b_red)^2)
+      ss_res_red <- solveAndCalculateResiduals(XX2, db_CpG)
+
       # F test
       df_full <- nrow(XX)-nrow(b_full)
       df_red <- nrow(XX2)-nrow(b_red)
@@ -110,7 +101,6 @@ lm_ewas_outcome <-function(db_obj, trait, select_sites='full',select_chr=FALSE,
       p_val <- pf(F_val, df_red-df_full, df_full, lower.tail = FALSE)
       res <- data.frame(CpG = colnames(db_CpG), F_estimate=F_val,  p_value = p_val)
       rownames(res)<-NULL
-      res<- res %>% mutate(fdr_bh= p.adjust(p_value, method = "BH"))
       return(res)
     }
   }
@@ -133,7 +123,7 @@ lm_ewas_outcome <-function(db_obj, trait, select_sites='full',select_chr=FALSE,
   } else if (sum(select_chr==FALSE)==1 & sum(select_sites==FALSE)==1 & sum(gene_list==FALSE)==1) {
     stop("Please specify a selection argument for CpGs")
   } else if (sum(select_chr!=FALSE)==length(select_chr) &
-             sum(select_sites!=FALSE)==length(select_sites) | isTRUE(all(gene_list!=FALSE))) {
+             sum(select_sites!=FALSE)==length(select_sites) & isTRUE(all(gene_list!=FALSE))) {
     stop("Please specify only one argument at a time")
   }
 
@@ -146,20 +136,32 @@ lm_ewas_outcome <-function(db_obj, trait, select_sites='full',select_chr=FALSE,
   }
 
   if (nrow(CpG_test) <= block_size) {
-    res<-lewas(cpg_list=CpG_test$CpG)
-  } else{
-    nblock <- ceiling(nrow(CpG_test)/block_size)
-    blocks <- unname(split(1:nrow(CpG_test), cut(1:nrow(CpG_test), nblock)))
-    res_list <- list()
-    for(i in 1:length(blocks)){
-      res_list[[i]]<-lewas(cpg_list=CpG_test$CpG[blocks[[i]]])
-    }
+    res_list<-lewas(CpG_test$CpG)
     res <- do.call(rbind, res_list)
+    res<- res %>% mutate(fdr_bh= p.adjust(p_value, method = "BH"))
+  } else{
+    nblock  <- rep(1:ceiling(nrow(CpG_test)/block_size),each=block_size)[1:nrow(CpG_test)]
+    blocks <- split(CpG_test$CpG,nblock)
+    if (isFALSE(parallel)==TRUE) {
+     res_list <- lapply(blocks,function(x) {lewas(cpg_list=x)})
+      # res_list <- list()
+      #for(i in 1:length(blocks)){
+     #   res_list[[i]]<-lewas(cpg_list=blocks[[i]])
+      #}
+    } else{
+      oplan<-plan(multicore,workers=parallel) #
+      res_list <- future_map(blocks, ~lewas(.x))
+      on.exit(plan(oplan), add = TRUE)
+    }
+
+    res <- do.call(rbind, res_list)
+    res<- res %>% mutate(fdr_bh= p.adjust(p_value, method = "BH"))
   }
   if (!isFALSE(out_position)) {
     chr_dat <- db_obj$cpg_annot
-    res <- merge(res,chr_dat[,c('CpG','CHR',out_position)])
+    res <- merge(res,chr_dat[,c('CpG',out_position)])
   }
   return(res)
 }
+
 

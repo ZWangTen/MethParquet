@@ -12,6 +12,7 @@ lm_ewas_outcome(
   gene_list = FALSE,
   gene_col = FALSE,
   covariates_string,
+  parallel = FALSE,
   out_position = FALSE,
   NAs_to_zero = FALSE,
   block_size = 50000
@@ -39,6 +40,9 @@ If given, output will contain these columns and chromosome number.}
 \item{NAs_to_zero}{Convert missing values to 0 in methylation data. Default: `FALSE`.}
 
 \item{block_size}{Integer to specify number of CpGs in each iteration block. Default: 50,000.}
+
+\item{cores}{Number of cores used for parallel processing (forking). For details please see
+\code{\link[future]{plan}}.  Default: 1 (no parallel processing).}
 }
 \value{
 A data frame with coefficient estimates for `trait` and testing statistics.

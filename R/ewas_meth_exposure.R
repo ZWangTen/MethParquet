@@ -96,7 +96,7 @@ ewas_meth_exposure <- function(db_obj,m_null,select_sites='full',select_chr=FALS
       rownames(res)<-NULL
       res<- res %>% mutate(fdr_bh= p.adjust(p_value, method = "BH"))
       return(res)
-    } else { #glm.scoretest
+    } else {
       w <- mod_n$weights
       r <- mod_n$residuals
       dispersion <- 1
