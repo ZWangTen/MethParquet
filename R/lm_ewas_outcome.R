@@ -136,8 +136,7 @@ lm_ewas_outcome <-function(db_obj, trait, select_sites='full',select_chr=FALSE,
   }
 
   if (nrow(CpG_test) <= block_size) {
-    res_list<-lewas(CpG_test$CpG)
-    res <- do.call(rbind, res_list)
+    res<-lewas(CpG_test$CpG)
     res<- res %>% mutate(fdr_bh= p.adjust(p_value, method = "BH"))
   } else{
     nblock  <- rep(1:ceiling(nrow(CpG_test)/block_size),each=block_size)[1:nrow(CpG_test)]
