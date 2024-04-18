@@ -75,7 +75,7 @@ names(mlist)
 Here we illustrate an example of simple linear regression, with the other assuming the same usage.
 
 ```{r}
-ewas_lm <- lm_ewas_outcome(db_obj=mlist,trait='bmi',covariates_string = c('age','sex'),out_position='MAPINFO')
+ewas_lm <- lm_ewas_outcome(db_obj=mlist,trait='bmi',covariates_string = c('age','sex'),out_position=c('CHR','MAPINFO'))
 kable(head(ewas_lm))
 ```
 
