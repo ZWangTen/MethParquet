@@ -34,15 +34,15 @@ Only one selection for CpG is allowed, `sites`, `chromosome`, or `gene`.}
 
 \item{covariates_string}{Columns for covariates to adjust in model from `subject_annot` of `MethList`.}
 
+\item{parallel}{Number of cores used for parallel processing (forking). For details please see
+\code{\link[future]{plan}}.  Default: 1 (no parallel processing).}
+
 \item{out_position}{Column name for CpG position in chromosome from `cpg_annot` of `MethList`.
 If given, output will contain these columns and chromosome number.}
 
 \item{NAs_to_zero}{Convert missing values to 0 in methylation data. Default: `FALSE`.}
 
 \item{block_size}{Integer to specify number of CpGs in each iteration block. Default: 50,000.}
-
-\item{cores}{Number of cores used for parallel processing (forking). For details please see
-\code{\link[future]{plan}}.  Default: 1 (no parallel processing).}
 }
 \value{
 A data frame with coefficient estimates for `trait` and testing statistics.

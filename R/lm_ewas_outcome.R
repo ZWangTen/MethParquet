@@ -15,7 +15,7 @@
 #'  If given, output will contain these columns and chromosome number.
 #' @param NAs_to_zero Convert missing values to 0 in methylation data. Default: `FALSE`.
 #' @param block_size Integer to specify number of CpGs in each iteration block. Default: 50,000.
-#' @param cores Number of cores used for parallel processing (forking). For details please see
+#' @param parallel Number of cores used for parallel processing (forking). For details please see
 #' \code{\link[future]{plan}}.  Default: 1 (no parallel processing).
 #'
 #' @return A data frame with coefficient estimates for `trait` and testing statistics.
