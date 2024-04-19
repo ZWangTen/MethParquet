@@ -13,7 +13,8 @@ ewas_meth_exposure(
   gene_col = FALSE,
   NAs_to_zero = FALSE,
   out_position = FALSE,
-  block_size = 50000
+  block_size = 50000,
+  parallel = FALSE
 )
 }
 \arguments{
@@ -36,6 +37,9 @@ Only one selection for CpG is allowed, `sites`, `chromosome`, or `gene`.}
 If given, output will contain these columns and chromosome number.}
 
 \item{block_size}{Integer to specify number of CpGs in each iteration block. Default: 50,000.}
+
+\item{parallel}{Number of cores used for parallel processing (forking). For details please see
+\code{\link[future]{plan}}.  Default: FALSE (sequential processes).}
 }
 \value{
 A data frame with coefficient estimates for CpGs as exposure and testing statistics.

@@ -14,6 +14,8 @@
 #' @param out_position Column name for CpG position in chromosome from `cpg_annot` of `MethList`.
 #'  If given, output will contain these columns and chromosome number.
 #' @param block_size Integer to specify number of CpGs in each iteration block. Default: 50,000.
+#' @param parallel Number of cores used for parallel processing (forking). For details please see
+#' \code{\link[future]{plan}}.  Default: FALSE (sequential processes).
 #'
 #' @return A data frame with coefficient estimates for `trait` and testing statistics.
 #' @export
@@ -22,27 +24,28 @@
 #' @examples
 #' library(tidyverse)
 #' library(arrow)
-#' library(limma)
-#' data(MethData)
+#'
+#' wdir <- getwd()
+#' methpath <- paste0(wdir,'/inst/extdata/MethData.csv')
 #' data(phenoData)
 #' data(chrAnnotation)
-#' wdir <- getwd()
-#' path <- paste0(wdir,'/Parquet_Directory')
 #'
-#' # Create Parquet data in 'path' and MethList
-#' MethData %>% group_by(CHR) %>% arrow::write_dataset(path,format = "parquet")
+#' # Create Parquet data and MethList
+#' path <- paste0(wdir,'/Parquet_Directory')
+#' write_parquet_meth(data_path=methpath,format='csv',group_by='CHR',parquet_path = path)
 #'
 #' mlist <- create_methlist(db_path = path,cpg_col_db='CpG',subject_annot = phenoData,
 #' subject_col_keep='all',cpgAnnot_col_keep=c(1:2,12:13,16),cpg_annot = chrAnnotation,
 #' subject_id='sample_id',cpg_col_annot='Name', gene_col_name = 'UCSC_RefGene_Name')
 #'
+#' # Run robust linear regression model on chromosome 1, 2 and 21
 #' ewas_rlm <- rlm_ewas_outcome(db_obj=mlist,trait='disease',select_sites=FALSE,gene_list=FALSE,
 #' select_chr=c('1','2','21'),covariates_string = c('age','sex'),out_position='MAPINFO')
 #' head(ewas_rlm)
 #' unlink(path,recursive=TRUE)
 
 rlm_ewas_outcome <- function(db_obj, trait, select_sites='full',select_chr=FALSE,
-                             gene_list=FALSE,gene_col=FALSE, covariates_string,
+                             gene_list=FALSE,gene_col=FALSE, covariates_string, parallel=FALSE,
                              NAs_to_zero=FALSE, out_position=FALSE,block_size=50000){
   db <- db_obj$db
   pheno <- db_obj$subject_annot
@@ -118,7 +121,6 @@ rlm_ewas_outcome <- function(db_obj, trait, select_sites='full',select_chr=FALSE
       p_val <- pf(F_val, df_red-df_full, df_full, lower.tail = FALSE)
       res <- data.frame(CpG = rownames(db_CpG), F_estimate=F_val,  p_value = p_val)
       rownames(res)<-NULL
-      res<- res %>% mutate(fdr_bh= p.adjust(p_value, method = "BH"))
       return(res)
     }
   }
@@ -129,18 +131,24 @@ rlm_ewas_outcome <- function(db_obj, trait, select_sites='full',select_chr=FALSE
 
   if(nrow(CpG_test) <= block_size) {
     res=rewas(cpg_list=CpG_test$CpG)
+    res<- res %>% mutate(fdr_bh= p.adjust(p_value, method = "BH"))
   } else{
-    nblock <- ceiling(nrow(CpG_test)/block_size)
-    blocks <- unname(split(1:nrow(CpG_test), cut(1:nrow(CpG_test), nblock)))
-    res_list <- list()
-    for(i in 1:length(blocks)){
-      res_list[[i]]=rewas(cpg_list=CpG_test$CpG[blocks[[i]]])
+    nblock  <- rep(1:ceiling(nrow(CpG_test)/block_size),each=block_size)[1:nrow(CpG_test)]
+    blocks <- split(CpG_test$CpG,nblock)
+    if (isFALSE(parallel)==TRUE) {
+      res_list <- lapply(blocks,function(x) {rewas(cpg_list=x)})
+    } else{
+      oplan<-plan(multicore,workers=parallel) #
+      res_list <- future_map(blocks, ~rewas(.x))
+      on.exit(plan(oplan), add = TRUE)
     }
     res <- do.call(rbind, res_list)
+    res<- res %>% mutate(fdr_bh= p.adjust(p_value, method = "BH"))
   }
+
   if (!isFALSE(out_position)) {
     chr_dat <- db_obj$cpg_annot
-    res <- merge(res,chr_dat[,c('CpG','CHR',out_position)])
+    res <- merge(res,chr_dat[,c('CpG',out_position)])
   }
   return(res)
 }

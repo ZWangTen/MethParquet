@@ -37,13 +37,15 @@ library(knitr)
 
 ### Create Parquet database and MethList object
 
-[MethParquet](https://github.com/ZWangTen/MethParquet) takes a `MethList` object created by `create_methlist()`. This object must contain the connection to the parquet database for the processed methylation data (in beta or M values), along with sample and CpG annotation in the `data.frame` format. Below is the example code to create the parquet database using `write_dataset()` from [arrow](https://arrow.apache.org/docs/r/index.html), followed by generation of MethList.
+[MethParquet](https://github.com/ZWangTen/MethParquet) takes a `MethList` object created by `create_methlist()`. This object must contain the connection to the Parquet database for the processed methylation data (in beta or M values), along with sample and CpG annotation in the `data.frame` format. Below is the example code to create the parquet database using `write_parquet_meth`, leveraging the package [arrow](https://arrow.apache.org/docs/r/index.html), followed by generation of MethList. 
+Note that MethData is only loaded to demonstrate the data structure. During creation of the Parquet database, this methylation matrix is not loaded into local memory.
 
 ```{r}
 # Load example data
 data(phenoData)
 data(chrAnnotation)
-data(MethData)
+MethData <- read.csv(list.files(system.file('extdata', package = 'MethParquet'), 
+                              full.names = TRUE))
 kable(head(MethData,c(3L,5L)))
 ```
 
@@ -51,8 +53,9 @@ Create Parquet database in `path` where the methylation data is partitioned by c
 
 ```{r}
 wdir <- getwd()
-path <- paste0(wdir,'/data/Parquet_Directory')
-MethData %>% group_by(CHR) %>% arrow::write_dataset(path,format = "parquet")
+methpath <- paste0(wdir,'/inst/extdata/MethData.csv')
+path <- paste0(wdir,'/Parquet_Directory')
+write_parquet_meth(data_path=methpath,format='csv',group_by='CHR',parquet_path = path)
 ```
 
 While creating MethList, users can choose to include only relevant columns from CpG and sample annotation to optimize data. Here only CpG names and position in chromosome (`Name` and `MAPINFO`), choromosome number `CHR` as well as gene names `UCSC_RefGene_Name` are included in the `mlist`.
@@ -123,7 +126,7 @@ Run association tests with fitted null model on chromosome 1-5.
 
 ```{r}
 chr <- as.character(seq(from=1,to=5))
-mixed=ewas_meth_exposure(db_obj=mlist,m.null,select_sites = FALSE,select_chr = chr, out_position=c('MAPINFO','Gene'))
+mixed=ewas_meth_exposure(db_obj=mlist,m.null,select_sites = FALSE,select_chr = chr, out_position=c('CHR','MAPINFO','Gene'))
 kable(head(mixed))
 ```
 

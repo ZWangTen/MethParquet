@@ -12,6 +12,7 @@ rlm_ewas_outcome(
   gene_list = FALSE,
   gene_col = FALSE,
   covariates_string,
+  parallel = FALSE,
   NAs_to_zero = FALSE,
   out_position = FALSE,
   block_size = 50000
@@ -32,6 +33,9 @@ Only one selection for CpG is allowed, `sites`, `chromosome`, or `gene`.}
 \item{gene_col}{Column for gene names in the CpG annotation data from `Methlist`.}
 
 \item{covariates_string}{Columns for covariates to adjust in model from `subject_annot` of `MethList`.}
+
+\item{parallel}{Number of cores used for parallel processing (forking). For details please see
+\code{\link[future]{plan}}.  Default: FALSE (sequential processes).}
 
 \item{NAs_to_zero}{Convert missing values to 0 in methylation data. Default: `FALSE`.}
 

@@ -13,6 +13,8 @@
 #' @param out_position Column name for CpG position in chromosome from `cpg_annot` of `MethList`.
 #'  If given, output will contain these columns and chromosome number.
 #' @param block_size Integer to specify number of CpGs in each iteration block. Default: 50,000.
+#' @param parallel Number of cores used for parallel processing (forking). For details please see
+#' \code{\link[future]{plan}}.  Default: FALSE (sequential processes).
 #'
 #' @return A data frame with coefficient estimates for CpGs as exposure and testing statistics.
 #' @export
@@ -20,14 +22,15 @@
 #' @examples
 #' library(tidyverse)
 #' library(arrow)
+#'
+#' wdir <- getwd()
+#' methpath <- paste0(wdir,'/inst/extdata/MethData.csv')
 #' data(phenoData)
 #' data(chrAnnotation)
-#' data(MethData)
-#' wdir <- getwd()
-#' path <- paste0(wdir,'/Parquet_Directory')
 #'
-#' # Create Parquet data in 'path' and MethList
-#' MethData %>% group_by(CHR) %>% arrow::write_dataset(path,format = "parquet")
+#' # Create Parquet data and MethList
+#' path <- paste0(wdir,'/Parquet_Directory')
+#' write_parquet_meth(data_path=methpath,format='csv',group_by='CHR',parquet_path = path)
 #'
 #' mlist <- create_methlist(db_path = path,cpg_col_db='CpG',subject_annot = phenoData,
 #' subject_col_keep='all',cpgAnnot_col_keep=c(1:2,12:13,16),cpg_annot = chrAnnotation,
@@ -44,7 +47,7 @@
 
 ewas_meth_exposure <- function(db_obj,m_null,select_sites='full',select_chr=FALSE,
                                gene_list=FALSE,gene_col=FALSE,NAs_to_zero=FALSE,
-                               out_position=FALSE,block_size=50000){
+                               out_position=FALSE,block_size=50000,parallel=FALSE){
   db <- db_obj$db
   pheno <- db_obj$subject_annot
   chr_dat <- db_obj$cpg_annot
@@ -107,7 +110,6 @@ ewas_meth_exposure <- function(db_obj,m_null,select_sites='full',select_chr=FALS
       p_val <- pchisq(z_vec^2,df=1,lower.tail = FALSE)
       res <- data.frame(CpG = colnames(db_CpG),Score = z_vec,p_value = p_val) #
       rownames(res)<-NULL
-      res <- res %>% mutate(fdr_bh= p.adjust(p_value, method = "BH"))
       return(res)
     }
   }
@@ -135,18 +137,24 @@ ewas_meth_exposure <- function(db_obj,m_null,select_sites='full',select_chr=FALS
 
   if(nrow(CpG_test) <= block_size) {
     res <- mod_test(cpg_list=CpG_test$CpG)
+    res <- res %>% mutate(fdr_bh= p.adjust(p_value, method = "BH"))
   } else{
-    nblock <- ceiling(nrow(CpG_test)/block_size)
-    blocks <- unname(split(1:nrow(CpG_test), cut(1:nrow(CpG_test), nblock)))
-    res_list <- list()
-    for(i in 1:length(blocks)){
-      res_list[[i]] <- mod_test(cpg_list=CpG_test$CpG[blocks[[i]]])
+    nblock  <- rep(1:ceiling(nrow(CpG_test)/block_size),each=block_size)[1:nrow(CpG_test)]
+    blocks <- split(CpG_test$CpG,nblock)
+    if (isFALSE(parallel)==TRUE) {
+      res_list <- lapply(blocks,function(x) {mod_test(cpg_list=x)})
+    } else{
+      oplan<-plan(multicore,workers=parallel) #
+      res_list <- future_map(blocks, ~mod_test(.x))
+      on.exit(plan(oplan), add = TRUE)
     }
     res <- do.call(rbind, res_list)
+    res <- res %>% mutate(fdr_bh= p.adjust(p_value, method = "BH"))
   }
+
   if (!isFALSE(out_position)) {
     chr_dat <- db_obj$cpg_annot
-    res <- merge(res,chr_dat[,c('CpG','CHR',out_position)])
+    res <- merge(res,chr_dat[,c('CpG',out_position)])
   }
   return(res)
 }

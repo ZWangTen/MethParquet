@@ -35,7 +35,7 @@ Only one selection for CpG is allowed, `sites`, `chromosome`, or `gene`.}
 \item{covariates_string}{Columns for covariates to adjust in model from `subject_annot` of `MethList`.}
 
 \item{parallel}{Number of cores used for parallel processing (forking). For details please see
-\code{\link[future]{plan}}.  Default: 1 (no parallel processing).}
+\code{\link[future]{plan}}.  Default: FALSE (sequential processes).}
 
 \item{out_position}{Column name for CpG position in chromosome from `cpg_annot` of `MethList`.
 If given, output will contain these columns and chromosome number.}
