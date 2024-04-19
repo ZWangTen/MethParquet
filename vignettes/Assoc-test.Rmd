@@ -54,7 +54,7 @@ Create Parquet database in `path` where the methylation data is partitioned by c
 wdir <- getwd()
 methpath <- paste0(wdir,'/inst/extdata/MethData.csv')
 path <- paste0(wdir,'/Parquet_Directory')
-write_parquet_meth(data_path=methpath,format='csv',group_by='CHR',parquet_path = path)
+MethParquet::write_parquet_meth(data_path=methpath,format='csv',group_by='CHR',parquet_path = path)
 ```
 
 While creating MethList, users can choose to include only relevant columns from CpG and sample annotation to optimize data. Here only CpG names and position in chromosome (`Name` and `MAPINFO`), choromosome number `CHR` as well as gene names `UCSC_RefGene_Name` are included in the `mlist`.
