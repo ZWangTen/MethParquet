@@ -44,8 +44,7 @@ Note that MethData is only loaded to demonstrate the data structure. During crea
 # Load example data
 data(phenoData)
 data(chrAnnotation)
-MethData <- read.csv(list.files(system.file('extdata', package = 'MethParquet'), 
-                              full.names = TRUE))
+MethData <- read.csv(system.file("extdata/MethData.csv", package="MethParquet"))
 kable(head(MethData,c(3L,5L)))
 ```
 
@@ -150,5 +149,6 @@ rlm_function <- function(x) {
 
 flex_rlm <- flex_ewas(mlist,rlm_function,out_position = c('MAPINFO','Gene'))
 kable(head(flex_rlm))
+unlink(path,recursive=TRUE)
 ```
 
