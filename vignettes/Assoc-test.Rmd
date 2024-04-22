@@ -23,6 +23,8 @@ knitr::opts_chunk$set(
 
 This vignette shows how to use [MethParquet](https://github.com/ZWangTen/MethParquet) to conduct association tests on normalized methylation data, from simple linear to mixed models incorporating kinship matrix as random effect to account for genetic similarity among samples, inspired by [GENESIS](https://bioconductor.org/packages/3.19/bioc/html/GENESIS.html). We also provide a short example for a more flexible association analysis using `flex_ewas()`, which accepts a regression model created by users as input to test each CpG site one after another. 
 
+*Note that all results were based on toy datasets and hence are not meant for significant biological interpretation.
+
 ## Data
 
 Load required packages
@@ -77,7 +79,7 @@ names(mlist)
 Here we illustrate an example of simple linear regression, with the other assuming the same usage.
 
 ```{r}
-ewas_lm <- lm_ewas_outcome(db_obj=mlist,trait='bmi',covariates_string = c('age','sex'),out_position=c('CHR','MAPINFO'))
+ewas_lm <- lm_ewas_outcome(db_obj=mlist,trait='age',covariates_string = c('bmi','sex'),out_position=c('CHR','MAPINFO'),NAs_to_zero = TRUE)
 kable(head(ewas_lm))
 ```
 
@@ -125,7 +127,7 @@ Run association tests with fitted null model on chromosome 1-5.
 
 ```{r}
 chr <- as.character(seq(from=1,to=5))
-mixed=ewas_meth_exposure(db_obj=mlist,m.null,select_sites = FALSE,select_chr = chr, out_position=c('CHR','MAPINFO','Gene'))
+mixed=ewas_meth_exposure(db_obj=mlist,m.null,select_sites = FALSE,select_chr = chr, out_position=c('CHR','MAPINFO','Gene'),NAs_to_zero = TRUE)
 kable(head(mixed))
 ```
 
@@ -143,7 +145,7 @@ ggplot(mixed, aes(x=CHR, y=-log10(p_value))) +
 
 ```{r}
 rlm_function <- function(x) {
-  mod <- base::suppressWarnings(MASS::rlm(as.formula(paste('height', "~x+", 'age')), data = phenoData))
+  mod <- base::suppressWarnings(MASS::rlm(as.formula(paste('age', "~x+", 'age')), data = phenoData))
   return(summary(mod)$coefficients[2,])
 }
 

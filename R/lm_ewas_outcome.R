@@ -83,6 +83,7 @@ lm_ewas_outcome <-function(db_obj, trait, select_sites='full',select_chr=FALSE,
       rownames(res)<-NULL
       return(res)
     } else {          # Categorical trait
+      b_full<-solve(t(XX)%*%XX)%*%t(XX)%*%db_CpG
       ss_res_full <- solveAndCalculateResiduals(XX, db_CpG)
 
       # reduced model
@@ -93,6 +94,7 @@ lm_ewas_outcome <-function(db_obj, trait, select_sites='full',select_chr=FALSE,
         XX2 <- model.matrix(as.formula(paste('~',1)),data=pheno)
       }
       XX2 <- as.matrix(XX2[rownames(XX),])
+      b_red<-solve(t(XX2)%*%XX2)%*%t(XX2)%*%db_CpG
       ss_res_red <- solveAndCalculateResiduals(XX2, db_CpG)
 
       # F test

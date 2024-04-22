@@ -118,7 +118,7 @@ Step 1:Call functions & import betas -------------------------------------
 
 Download the code from Github into a named directory and set as working directory.
 
-```{r,echo=FALSE,eval=FALSE}
+```{r,eval=FALSE}
 library(tidyverse)
 library(readr)
 require(geepack)
@@ -134,13 +134,13 @@ source(paste0(path_to_Aclust2.0-main,'aclust2.0_utils.R'))
 
 Step 2: Get Illumina manifests for MM285, 450K, EPICv1, EPICv2 ---------
 
-```{r,echo=FALSE,eval=FALSE}
+```{r,eval=FALSE}
 manifest <- get_manifest("EPICv1") #to pull EPICv1 manifest
 ```
 
 Step 3: Clustering of CpGs ----------------------------------------------
 
-```{r,warning=FALSE,echo=FALSE,eval=FALSE}
+```{r,warning=FALSE,eval=FALSE}
 ##This step creates a list that accommodates three objects 
 list.out <- find_cluster_list(probe.vec = rownames(betas_DMR), 
                               betas = betas_DMR, 
@@ -153,7 +153,7 @@ cpg.clusters <- list.out$cpg.clusters #Includes only the CpG clusters which can 
 
 Step 4: Run gee model ---------------------------------------------------
 
-```{r,echo=FALSE,eval=FALSE}
+```{r,eval=FALSE}
 ## Define exposure, covariates (optional) and sample.id
 pheno<-read.csv(paste0(wdir,'/inst/extdata/PhenoData_DMR.csv'),row.names=1)
 sample.id  <- pheno$sample_id
@@ -172,7 +172,7 @@ cluster.gee <- GEE.clusters(betas = betas_DMR, clusters.list = list.out$clusters
 
 Step 5: Perform chromosomal annotations ---------------------------------
 
-```{r,echo=FALSE,eval=FALSE}
+```{r,eval=FALSE}
 #For cluster outputs from gee model in step 4
 annot.betas <- list.out$annot.betas
 clus <- cluster.gee ## (from step 4)
