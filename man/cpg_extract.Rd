@@ -40,13 +40,15 @@ library(tidyverse)
 library(arrow)
 data(phenoData)
 data(chrAnnotation)
-data(ewas_bmi)
-data(MethData)
-wdir <- getwd()
-path <- paste0(wdir,'/Parquet_Directory')
 
-# Create Parquet data in 'path' and MethList
-MethData \%>\% group_by(CHR) \%>\% arrow::write_dataset(path,format = "parquet")
+wdir <- getwd()
+methpath <- paste0(wdir,'/inst/extdata/MethData.csv')
+data(phenoData)
+data(chrAnnotation)
+
+# Create Parquet data and MethList
+path <- paste0(wdir,'/Parquet_Directory')
+write_parquet_meth(data_path=methpath,format='csv',group_by='CHR',parquet_path = path)
 
 mlist <- create_methlist(db_path = path,cpg_col_db='CpG',subject_annot = phenoData,
 subject_col_keep='all',cpgAnnot_col_keep=c(1:2,12:13,16),cpg_annot = chrAnnotation,
@@ -57,6 +59,7 @@ chr <- as.character(seq(1:5))
 extr_chr <- cpg_extract(mlist,select_chr=chr,chr_col='CHR')
 head(extr_chr[[1]])[1:5,1:5]
 head(extr_chr[[2]])
+
 # Based on row index
 extr_row <- cpg_extract(mlist,row_indices = 1:100)
 unlink(path,recursive=TRUE)

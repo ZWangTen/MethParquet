@@ -58,14 +58,15 @@ and the annotation for CpGs and samples in data.frame.
 \examples{
 library(tidyverse)
 library(arrow)
-data(MethData)
+
+wdir <- getwd()
+methpath <- paste0(wdir,'/inst/extdata/MethData.csv')
 data(phenoData)
 data(chrAnnotation)
-wdir <- getwd()
-path <- paste0(wdir,'/Parquet_Directory')
 
 # Create Parquet data in 'path'
-MethData \%>\% group_by(CHR) \%>\% arrow::write_dataset(path,format = "parquet")
+path <- paste0(wdir,'/Parquet_Directory')
+write_parquet_meth(data_path=methpath,format='csv',group_by='CHR',parquet_path = path)
 
 # Create MethList object
 mlist <- create_methlist(db_path = path,cpg_col_db='CpG',subject_annot = phenoData,

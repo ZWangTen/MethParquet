@@ -57,12 +57,12 @@ create_methlist <- function(db_path, cpg_col_db, subject_annot, subject_col_keep
   stopifnot('Subject_id is not in subject annotation'=subject_id %in% colnames(subject_annot))
   stopifnot('CpG column is not in CpG annotation'=cpg_col_annot %in% colnames(cpg_annot))
 
-  subject_annot <- subject_annot %>% rename(sample_id = as.character(subject_id))
+  subject_annot <- subject_annot %>% dplyr::rename(sample_id = as.character(subject_id))
   row.names(subject_annot) <- subject_annot$sample_id
-  cpg_annot <- cpg_annot %>% rename(CpG = as.character(cpg_col_annot))
+  cpg_annot <- cpg_annot %>% dplyr::rename(CpG = as.character(cpg_col_annot))
 
   if(gene_col_name != FALSE) {
-    cpg_annot <- cpg_annot %>% rename(Gene = as.character(gene_col_name))
+    cpg_annot <- cpg_annot %>% dplyr::rename(Gene = as.character(gene_col_name))
   }
 
   if(all(subject_col_keep!='all')==TRUE) {
@@ -70,7 +70,7 @@ create_methlist <- function(db_path, cpg_col_db, subject_annot, subject_col_keep
   }
 
   if(chr_col_name != FALSE) {
-    cpg_annot <- cpg_annot %>% rename(CHR = as.character(chr_col_name))
+    cpg_annot <- cpg_annot %>% dplyr::rename(CHR = as.character(chr_col_name))
   }
 
   if(all(cpgAnnot_col_keep!='all')==TRUE) {
@@ -78,7 +78,7 @@ create_methlist <- function(db_path, cpg_col_db, subject_annot, subject_col_keep
   }
 
   db <- open_dataset(db_path)
-  db <- db %>% rename(CpG=as.character(cpg_col_db))
+  db <- db %>% dplyr::rename(CpG=as.character(cpg_col_db))
 
   meth_list <- list(db=db, subject_annot=subject_annot, cpg_annot=cpg_annot)
 

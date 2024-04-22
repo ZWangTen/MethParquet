@@ -43,7 +43,7 @@
 #'
 #' # Run linear regression model
 #' ewas_lm <- lm_ewas_outcome(db_obj=mlist,trait='bmi',select_sites='full',select_chr=FALSE,
-#' covariates_string = c('age','sex'),out_position='MAPINFO',block_size=100000)
+#' covariates_string = c('age','sex'),out_position='MAPINFO')
 #' head(ewas_lm)
 #' unlink(path,recursive=TRUE)
 

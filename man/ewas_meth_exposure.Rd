@@ -51,14 +51,15 @@ fitted by function \code{\link{NullModel}}
 \examples{
 library(tidyverse)
 library(arrow)
+
+wdir <- getwd()
+methpath <- paste0(wdir,'/inst/extdata/MethData.csv')
 data(phenoData)
 data(chrAnnotation)
-data(MethData)
-wdir <- getwd()
-path <- paste0(wdir,'/Parquet_Directory')
 
-# Create Parquet data in 'path' and MethList
-MethData \%>\% group_by(CHR) \%>\% arrow::write_dataset(path,format = "parquet")
+# Create Parquet data and MethList
+path <- paste0(wdir,'/Parquet_Directory')
+write_parquet_meth(data_path=methpath,format='csv',group_by='CHR',parquet_path = path)
 
 mlist <- create_methlist(db_path = path,cpg_col_db='CpG',subject_annot = phenoData,
 subject_col_keep='all',cpgAnnot_col_keep=c(1:2,12:13,16),cpg_annot = chrAnnotation,
