@@ -21,7 +21,7 @@
 #' library(arrow)
 #' library(tidyverse)
 #' wdir <- getwd()
-#' methpath <- paste0(wdir,'/inst/extdata/MethData.csv')
+#' methpath <- system.file('extdata','MethData.csv',package='MethParquet')
 #' path <- paste0(wdir,'/Parquet_Directory')
 #' write_parquet_meth(data_path=methpath,format='csv',group_by='CHR',parquet_path = path)
 #' list.files(path)

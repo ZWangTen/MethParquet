@@ -19,7 +19,7 @@
 #' data(chrAnnotation)
 #'
 #' wdir <- getwd()
-#' methpath <- paste0(wdir,'/inst/extdata/MethData.csv')
+#' methpath <- system.file('extdata','MethData.csv',package='MethParquet')
 #' data(phenoData)
 #' data(chrAnnotation)
 #'
