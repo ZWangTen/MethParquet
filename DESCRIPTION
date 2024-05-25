@@ -24,7 +24,9 @@ Imports:
     furrr,
     future,
     Rcpp,
-    aws.s3
+    aws.s3,
+    RcppEigen, 
+    ggplot2
 LinkingTo: Rcpp, RcppEigen
 License: MIT + file LICENSE
 Encoding: UTF-8
