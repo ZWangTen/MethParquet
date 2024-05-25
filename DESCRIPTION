@@ -23,7 +23,8 @@ Imports:
     psych,
     furrr,
     future,
-    Rcpp
+    Rcpp,
+    aws.s3
 LinkingTo: Rcpp, RcppEigen
 License: MIT + file LICENSE
 Encoding: UTF-8
