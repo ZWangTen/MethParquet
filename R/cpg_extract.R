@@ -11,7 +11,8 @@
 #'
 #' @return Subset of CpG data along with their annotation based on selection criteria
 #' @export
-#' @import tidyverse
+#' @import dplyr
+#' @import rlang
 #' @examples
 #' library(tidyverse)
 #' library(arrow)

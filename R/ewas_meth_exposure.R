@@ -18,7 +18,8 @@
 #'
 #' @return A data frame with coefficient estimates for CpGs as exposure and testing statistics.
 #' @export
-#' @import tidyverse
+#' @import dplyr
+#' @import rlang
 #' @examples
 #' library(tidyverse)
 #' library(arrow)

@@ -12,8 +12,9 @@
 #' @return A plot with methylation beta values on y axis against the phenotype on x axis
 #' @export
 #' @import ggplot2
-#' @import tidyverse
+#' @import dplyr
 #' @importFrom arrow open_dataset
+#' @import rlang
 #'
 #' @examples
 #' library(tidyverse)
@@ -36,7 +37,7 @@
 #' # Run linear model and get top results
 #' ewas_lm <- lm_ewas_outcome(db_obj=mlist,trait='bmi',select_sites='full',select_chr=FALSE,
 #' covariates_string = c('age','sex'),out_position='MAPINFO',block_size=100000)
-#' sites<-ewas_lm$CpG[ewas_lm$fdr_bh<0.05][1:3]
+#' sites<-ewas_lm$CpG[order(ewas_lm$fdr_bh)][1:3]
 #'
 #' # Plot top results
 #' plot_MethPheno(mlist,sites=sites,trait='bmi',output_plot = FALSE)

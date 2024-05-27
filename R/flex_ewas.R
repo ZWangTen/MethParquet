@@ -16,7 +16,8 @@
 #'
 #' @return A data frame with results obtained using `fun`.
 #' @export
-#' @import tidyverse
+#' @import dplyr
+#' @import rlang
 #' @examples
 #' library(tidyverse)
 #' library(arrow)

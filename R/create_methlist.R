@@ -27,7 +27,8 @@
 #' `subject_annot`: subject annotation file
 #' `cpg_annot`: CpG annotation file
 #' @export
-#' @import tidyverse
+#' @import dplyr
+#' @import rlang
 #' @importFrom arrow open_dataset
 #' @examples
 #' library(tidyverse)

@@ -20,7 +20,8 @@
 #'
 #' @return A data frame with coefficient estimates for `trait` and testing statistics.
 #' @export
-#' @import tidyverse Rcpp furrr future RcppEigen
+#' @import dplyr Rcpp furrr future RcppEigen
+#' @import rlang
 #' @importFrom Rcpp sourceCpp
 #' @useDynLib MethParquet
 #' @exportPattern "^[[:alpha:]]+"

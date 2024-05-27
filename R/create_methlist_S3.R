@@ -35,7 +35,8 @@
 #' `subject_annot`: subject annotation file
 #' `cpg_annot`: CpG annotation file
 #' @export
-#' @import tidyverse aws.s3
+#' @import dplyr aws.s3
+#' @import rlang
 #' @importFrom arrow open_dataset
 #' @examples
 #' # Example code only

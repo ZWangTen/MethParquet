@@ -15,9 +15,10 @@
 #' A list containing fitted model and coefficients estimates of methylation risk score (MRS).
 #' For multinomial logistic regression, the list will also contain likelihood ratio test for MRS.
 #' @export
-#' @import tidyverse
+#' @import dplyr
 #' @importFrom nnet multinom
 #' @importFrom car Anova
+#' @import rlang
 #' @examples
 #' library(tidyverse)
 #' library(arrow)
@@ -38,10 +39,11 @@
 #' subject_id='sample_id',cpg_col_annot='Name', gene_col_name = 'UCSC_RefGene_Name')
 #'
 #' # Calculation of MRS associated with BMI
-#' mrs_bmi <- dev_meth_score(db_obj=mlist,cpg_col='CpG',meth_effect_data = ewas_bmi,effect_col='Effect')
+#' mrs_bmi <- dev_meth_score(db_obj=mlist,cpg_col='CpG',meth_effect_data = ewas_bmi,effect_col='Effect',
+#' NAs_to_zero=TRUE)
 #'
-#' height <- test_mrs(db_obj = mlist, outcome = 'height', covariates = c('age','sex'), mrs = mrs_bmi)
-#' height[[2]]
+#' age <- test_mrs(db_obj = mlist, outcome = 'age', covariates = c('sex'), mrs = mrs_bmi)
+#' age[[2]]
 #' unlink(path,recursive=TRUE)
 
 test_mrs <- function(db_obj, phe_data=FALSE, mrs, outcome, covariates=FALSE){

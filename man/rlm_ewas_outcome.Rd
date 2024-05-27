@@ -68,9 +68,9 @@ mlist <- create_methlist(db_path = path,cpg_col_db='CpG',subject_annot = phenoDa
 subject_col_keep='all',cpgAnnot_col_keep=c(1:2,12:13,16),cpg_annot = chrAnnotation,
 subject_id='sample_id',cpg_col_annot='Name', gene_col_name = 'UCSC_RefGene_Name')
 
-# Run robust linear regression model on chromosome 1, 2 and 21
-ewas_rlm <- rlm_ewas_outcome(db_obj=mlist,trait='disease',select_sites=FALSE,gene_list=FALSE,
-select_chr=c('1','2','21'),covariates_string = c('age','sex'),out_position='MAPINFO')
+# Run robust linear regression model
+ewas_rlm <- rlm_ewas_outcome(db_obj=mlist,trait='sex',select_sites='full',gene_list=FALSE,
+select_chr=FALSE,covariates_string = c('bmi','age'),out_position='MAPINFO',NAs_to_zero=TRUE)
 head(ewas_rlm)
 unlink(path,recursive=TRUE)
 }

@@ -12,7 +12,8 @@
 #'
 #' @return A matrix of methylation risk scores associated to the phenotype for each subject
 #' @export
-#' @import tidyverse
+#' @import dplyr
+#' @import rlang
 #' @examples
 #' library(tidyverse)
 #' library(arrow)
