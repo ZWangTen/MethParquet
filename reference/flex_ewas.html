@@ -142,15 +142,27 @@ If given, output will contain these columns and chromosome number.</p></dd>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Create a robust linear regression function with methylation as exposure</span></span></span>
 <span class="r-in"><span><span class="va">rlm_function</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu">base</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/rlm.html" class="external-link">rlm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/formula.html" class="external-link">as.formula</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">'height'</span>, <span class="st">"~x+"</span>, <span class="st">'age'</span><span class="op">)</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">phenoData</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu">base</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/rlm.html" class="external-link">rlm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/formula.html" class="external-link">as.formula</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">'bmi'</span>, <span class="st">"~x+"</span>, <span class="st">'age'</span><span class="op">)</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">phenoData</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span><span class="op">$</span><span class="va">coefficients</span><span class="op">[</span><span class="fl">2</span>,<span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Run flex_ewas</span></span></span>
 <span class="r-in"><span><span class="va">flex_rlm</span> <span class="op">&lt;-</span> <span class="fu">flex_ewas</span><span class="op">(</span><span class="va">mlist</span>,<span class="va">rlm_function</span>,out_position <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'MAPINFO'</span>,<span class="st">'Gene'</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in rlm.default(x, y, weights, method = method, wt.method = wt.method,     ...):</span> 'x' is singular: singular fits are not implemented in 'rlm'</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">flex_rlm</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'flex_rlm' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          CpG      Value Std. Error    t value CHR  MAPINFO</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 cg00050692  -9.125491   10.99455 -0.8300017   2 25524877</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 cg00094412  18.594165   13.41107  1.3864785   6 29592854</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 cg00108715  25.518414   13.86193  1.8408996   3 52565015</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 cg00138407 -48.643123   20.64844 -2.3557769   3 47386505</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 cg00184953  70.024033   21.88390  3.1997968   6 31146222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 cg00222799  -2.459643   13.86372 -0.1774158  21 43655464</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                  Gene</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                DNMT3A;DNMT3A;DNMT3A</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                GABBR1;GABBR1;GABBR1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                       NT5DC2;NT5DC2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                              KLHL18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                            PSORS1C3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 ABCG1;ABCG1;ABCG1;ABCG1;ABCG1;ABCG1</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="va">path</span>,recursive<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
