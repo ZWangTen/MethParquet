@@ -102,7 +102,10 @@ meant for significant biological interpretation.</p>
 <p>Load required packages</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">MethParquet</span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/apache/arrow/" class="external-link">arrow</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: replacing previous import 'arrow::string' by 'rlang::string' when</span></span>
+<span><span class="co">#&gt; loading 'MethParquet'</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/apache/arrow/" class="external-link">arrow</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://bioinf.wehi.edu.au/limma/" class="external-link">limma</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/UW-GAC/GENESIS" class="external-link">GENESIS</a></span><span class="op">)</span></span>
@@ -121,7 +124,7 @@ package <a href="https://arrow.apache.org/docs/r/index.html" class="external-lin
 followed by generation of MethList. Note that MethData is only loaded to
 demonstrate the data structure. During creation of the Parquet database,
 this methylation matrix is not loaded into local memory.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Load example data</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">phenoData</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">chrAnnotation</span><span class="op">)</span></span>
@@ -161,7 +164,7 @@ this methylation matrix is not loaded into local memory.</p>
 </table>
 <p>Create Parquet database in <code>path</code> where the methylation
 data is partitioned by chromosome.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">wdir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">methpath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">wdir</span>,<span class="st">'/inst/extdata/MethData.csv'</span><span class="op">)</span></span>
 <span><span class="va">path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">wdir</span>,<span class="st">'/Parquet_Directory'</span><span class="op">)</span></span>
@@ -172,11 +175,11 @@ names and position in chromosome (<code>Name</code> and
 <code>MAPINFO</code>), choromosome number <code>CHR</code> as well as
 gene names <code>UCSC_RefGene_Name</code> are included in the
 <code>mlist</code>.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">chrAnnotation</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">12</span><span class="op">:</span><span class="fl">13</span>,<span class="fl">16</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="co">#&gt; [1] "Name"              "CHR"               "MAPINFO"          </span></span>
 <span><span class="co">#&gt; [4] "UCSC_RefGene_Name"</span></span></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mlist</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_methlist.html">create_methlist</a></span><span class="op">(</span>db_path <span class="op">=</span> <span class="va">path</span>,cpg_col_db<span class="op">=</span><span class="st">'CpG'</span>,subject_annot <span class="op">=</span> <span class="va">phenoData</span>,</span>
 <span>subject_col_keep<span class="op">=</span><span class="st">'all'</span>,cpgAnnot_col_keep<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">12</span><span class="op">:</span><span class="fl">13</span>,<span class="fl">16</span><span class="op">)</span>,cpg_annot <span class="op">=</span> <span class="va">chrAnnotation</span>,</span>
 <span>subject_id<span class="op">=</span><span class="st">'sample_id'</span>,cpg_col_annot<span class="op">=</span><span class="st">'Name'</span>, gene_col_name <span class="op">=</span> <span class="st">'UCSC_RefGene_Name'</span><span class="op">)</span></span>
@@ -205,7 +208,7 @@ and only relevant parameters are computed. That said, for same CpG list,
 <code><a href="../reference/rlm_ewas_outcome.html">rlm_ewas_outcome()</a></code> would take longer to finish as it
 performs a “site by site” test. Here we illustrate an example of simple
 linear regression, with the other assuming the same usage.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ewas_lm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lm_ewas_outcome.html">lm_ewas_outcome</a></span><span class="op">(</span>db_obj<span class="op">=</span><span class="va">mlist</span>,trait<span class="op">=</span><span class="st">'age'</span>,covariates_string <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'bmi'</span>,<span class="st">'sex'</span><span class="op">)</span>,out_position<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'CHR'</span>,<span class="st">'MAPINFO'</span><span class="op">)</span>,NAs_to_zero <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ewas_lm</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <table style="width:100%;" class="table">
@@ -303,12 +306,12 @@ linear regression, with the other assuming the same usage.</p>
 <p>As aforementioned, by specifying the CpG position in chromosome
 (<code>MAPINFO</code>), the output can be easily channeld to construct
 visualization plots.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/stephenturner/qqman" class="external-link">qqman</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/YinLiLin/CMplot" class="external-link">CMplot</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/qqman/man/qq.html" class="external-link">qq</a></span><span class="op">(</span><span class="va">ewas_lm</span><span class="op">$</span><span class="va">p_value</span>,main <span class="op">=</span> <span class="st">"Q-Q plot of linear model"</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">4</span><span class="op">)</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">6</span><span class="op">)</span>, pch <span class="op">=</span> <span class="fl">18</span>, col <span class="op">=</span> <span class="st">"blue4"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Assoc-test_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/CMplot/man/CMplot-package.html" class="external-link">CMplot</a></span><span class="op">(</span><span class="va">ewas_lm</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">8</span>,<span class="fl">9</span>,<span class="fl">6</span><span class="op">)</span><span class="op">]</span>,type<span class="op">=</span><span class="st">'p'</span>,plot.type<span class="op">=</span><span class="st">'m'</span>,dpi<span class="op">=</span><span class="fl">300</span>,file.output <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>       verbose<span class="op">=</span><span class="cn">TRUE</span>,width<span class="op">=</span><span class="fl">400</span>,height<span class="op">=</span><span class="fl">172</span>,chr.labels.angle<span class="op">=</span><span class="fl">45</span>,main <span class="op">=</span> <span class="st">'Manhattan_linear'</span><span class="op">)</span></span>
 <span><span class="co">#&gt;  Rectangular Manhattan plotting p_value.</span></span></code></pre></div>
@@ -329,7 +332,7 @@ particular, random effect is specified by covariance matrices
 testing by adding each CpG to the null model and returns a data frame
 with coefficient estimate and test statistics.</p></li>
 </ul>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Create a random kinship matrix</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://Matrix.R-forge.R-project.org" class="external-link">Matrix</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://personality-project.org/r/psych/" class="external-link">psych</a></span><span class="op">)</span></span>
@@ -342,7 +345,7 @@ with coefficient estimate and test statistics.</p></li>
 <span><span class="va">kinship</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/psych/man/cor.smooth.html" class="external-link">cor.smooth</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">kinship</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning in cor.smooth(as.matrix(kinship)): Matrix was not positive definite,</span></span>
 <span><span class="co">#&gt; smoothing was done</span></span></code></pre></div>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">kinship</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
@@ -385,7 +388,7 @@ with coefficient estimate and test statistics.</p></li>
 </table>
 <p>Now fit the null model with <code>age and</code>sex` as fixed and
 kinship matrix as random effect.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">m.null</span><span class="op">=</span><span class="fu"><a href="../reference/NullModel.html">NullModel</a></span><span class="op">(</span>db_obj<span class="op">=</span><span class="va">mlist</span>,trait<span class="op">=</span><span class="st">'bmi'</span>,covariates_string <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'age'</span>,<span class="st">'sex'</span><span class="op">)</span>,cov.mat <span class="op">=</span> <span class="va">kinship</span>,method<span class="op">=</span><span class="st">'mixed'</span>,family<span class="op">=</span><span class="st">'gaussian'</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Computing Variance Component Estimates...</span></span>
 <span><span class="co">#&gt; Sigma^2_A     log-lik     RSS</span></span>
@@ -394,14 +397,14 @@ kinship matrix as random effect.</p>
 <span><span class="co">#&gt; [1]   16.540708   93.491124 -374.620423    1.014747</span></span>
 <span><span class="co">#&gt; [1]   16.998809   94.672170 -374.620314    1.000216</span></span>
 <span><span class="co">#&gt; [1]   16.99712   94.69694 -374.62031    1.00000</span></span></code></pre></div>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">m.null</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "NullModel" "Y"         "X"</span></span></code></pre></div>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">m.null</span><span class="op">$</span><span class="va">NullModel</span><span class="op">$</span><span class="va">model</span><span class="op">$</span><span class="va">formula</span></span>
 <span><span class="co">#&gt; [1] "bmi ~ age + sex + (1|A)"</span></span></code></pre></div>
 <p>Run association tests with fitted null model on chromosome 1-5.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">chr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span>from<span class="op">=</span><span class="fl">1</span>,to<span class="op">=</span><span class="fl">5</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">mixed</span><span class="op">=</span><span class="fu"><a href="../reference/ewas_meth_exposure.html">ewas_meth_exposure</a></span><span class="op">(</span>db_obj<span class="op">=</span><span class="va">mlist</span>,<span class="va">m.null</span>,select_sites <span class="op">=</span> <span class="cn">FALSE</span>,select_chr <span class="op">=</span> <span class="va">chr</span>, out_position<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'CHR'</span>,<span class="st">'MAPINFO'</span>,<span class="st">'Gene'</span><span class="op">)</span>,NAs_to_zero <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mixed</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -501,7 +504,7 @@ kinship matrix as random effect.</p>
 instance, with gene name listed in the output, one can plot the CpG
 sites with gene as label using ggplot2. The CpGs on the top would be
 those with lowest p-values.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">mixed</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">CHR</span>, y<span class="op">=</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log10</a></span><span class="op">(</span><span class="va">p_value</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>color<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">CHR</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_text</a></span><span class="op">(</span>label<span class="op">=</span><span class="va">mixed</span><span class="op">$</span><span class="va">Gene</span>,size<span class="op">=</span><span class="fl">2</span>,vjust<span class="op">=</span><span class="fl">2</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position<span class="op">=</span><span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
@@ -514,7 +517,7 @@ those with lowest p-values.</p>
 using the provided external model. For example, the following robust
 linear regression takes methylation as exposure to compute its
 association with a quantitative trait <code>height</code>.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rlm_function</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu">base</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/rlm.html" class="external-link">rlm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/formula.html" class="external-link">as.formula</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">'age'</span>, <span class="st">"~x+"</span>, <span class="st">'age'</span><span class="op">)</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">phenoData</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span><span class="op">$</span><span class="va">coefficients</span><span class="op">[</span><span class="fl">2</span>,<span class="op">]</span><span class="op">)</span></span>
@@ -598,7 +601,7 @@ association with a quantitative trait <code>height</code>.</p>
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="va">path</span>,recursive<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
