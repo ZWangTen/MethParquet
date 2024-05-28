@@ -13,7 +13,7 @@ Sample names in phenotype data should be matching sample names in `mrs`.
 Set `db_obj` to `FALSE` if `phe_data` is specified.}
 
 \item{phe_data}{Phenotype data in data frame format. Default: `FALSE`
-Sample names in `phe_data` should be matching sample names in `mrs`}
+Sample names in `phe_data` should match sample names in `mrs`}
 
 \item{mrs}{Methylation risk score, like the matrix obtained from function \code{\link{dev_meth_score}}}
 

@@ -6,7 +6,7 @@
 #' Sample names in phenotype data should be matching sample names in `mrs`.
 #' Set `db_obj` to `FALSE` if `phe_data` is specified.
 #' @param phe_data Phenotype data in data frame format. Default: `FALSE`
-#' Sample names in `phe_data` should be matching sample names in `mrs`
+#' Sample names in `phe_data` should match sample names in `mrs`
 #' @param mrs Methylation risk score, like the matrix obtained from function \code{\link{dev_meth_score}}
 #' @param outcome Column for outcome inside phenotype data.
 #' @param covariates covariates to be included in the model. Default: `FALSE`
