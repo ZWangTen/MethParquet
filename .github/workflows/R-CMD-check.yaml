@@ -32,3 +32,7 @@ jobs:
         with:
           upload-snapshots: true
           build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
+      
+      - uses: r-lib/actions/check-r-package@v1
+        with:
+          error-on: '"error"'
