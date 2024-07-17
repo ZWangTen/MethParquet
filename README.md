@@ -14,7 +14,20 @@ data.
 
 <img
 src="https://github.com/ZWangTen/MethParquet/blob/main/man/Figure/MethParquet.png"
-width="700" height="580" />
+width="700" height="580" /> After Methlist construction,
+`dev_meth_score` function can be used to calculate the MRS as a weighted
+sum of an individual’s DNAm values and pre-calculated weights associated
+with the phenotype.
+
+EWAS using MethParquet can be conducted on the full set or a subset of
+DNAm data, through linear regression (`lm_ewas_outcome`), robust linear
+regression (`rlm_ewas_outcome`), generalized or mixed linear regression
+(`ewas_meth_exposure`, after fitting a null model using `NullModel`).
+
+`cpg_extract` allows users to extract subset of DNAm data by gene or CpG
+name, chromosome number, and row indices without loading all the data.
+
+To read specific examples please refer to Vignette.
 
 ## Installation
 
@@ -33,8 +46,13 @@ BiocManager::install("GENESIS")
 
 devtools::install_github("ZWangTen/MethParquet",build_vignettes = TRUE)
 
-# To view Vignette for association analysis
+# To view Vignette for Methparquet
 browseVignettes('MethParquet')
 ```
 
-## Citation
+# Citation
+
+Wang, Z., Cassidy, M., Wallace, D. A., & Sofer, T. (2024). MethParquet:
+An R package for Rapid and efficient DNA methylation Association
+Analysis adopting Apache Parquet. *Bioinformatics*.
+<https://doi.org/10.1093/bioinformatics/btae410>
