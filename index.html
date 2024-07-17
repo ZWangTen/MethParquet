@@ -70,12 +70,16 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
+
 <div class="section level1">
 <div class="page-header"><h1 id="methparquet">MethParquet<a class="anchor" aria-label="anchor" href="#methparquet"></a>
 </h1></div>
 <p>Manipulate and analyze methylation data using Apache Parquet</p>
 <p>MethParquet leverages the columnar format Parquet for efficient DNA methylation data analysis. Epigenome-wide association analysis, methylation risk score calculation and testing, as well as CpG subset extraction are streamlined via the Methlist object containing connection to methylation Parquet directory along with CpG and subject annotation data.</p>
-<p><img src="https://github.com/ZWangTen/MethParquet/blob/main/man/Figure/MethParquet.png" width="700" height="580"></p>
+<p><img src="https://github.com/ZWangTen/MethParquet/blob/main/man/Figure/MethParquet.png" width="700" height="580"> After Methlist construction, <code>dev_meth_score</code> function can be used to calculate the MRS as a weighted sum of an individual’s DNAm values and pre-calculated weights associated with the phenotype.</p>
+<p>EWAS using MethParquet can be conducted on the full set or a subset of DNAm data, through linear regression (<code>lm_ewas_outcome</code>), robust linear regression (<code>rlm_ewas_outcome</code>), generalized or mixed linear regression (<code>ewas_meth_exposure</code>, after fitting a null model using <code>NullModel</code>).</p>
+<p><code>cpg_extract</code> allows users to extract subset of DNAm data by gene or CpG name, chromosome number, and row indices without loading all the data.</p>
+<p>To read specific examples please refer to Vignette.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -89,14 +93,16 @@
 <span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"ZWangTen/MethParquet"</span>,build_vignettes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># To view Vignette for association analysis</span></span>
+<span><span class="co"># To view Vignette for Methparquet</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/browseVignettes.html" class="external-link">browseVignettes</a></span><span class="op">(</span><span class="st">'MethParquet'</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
-</h2>
 </div>
+<div class="section level1">
+<h1 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
+</h1>
+<p>Wang, Z., Cassidy, M., Wallace, D. A., &amp; Sofer, T. (2024). MethParquet: An R package for Rapid and efficient DNA methylation Association Analysis adopting Apache Parquet. <em>Bioinformatics</em>. <a href="https://doi.org/10.1093/bioinformatics/btae410" class="external-link uri">https://doi.org/10.1093/bioinformatics/btae410</a></p>
 </div>
+
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
