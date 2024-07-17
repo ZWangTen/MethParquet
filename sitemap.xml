@@ -1,81 +1,29 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>/404.html</loc>
-  </url>
-  <url>
-    <loc>/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>/articles/Assoc-test.html</loc>
-  </url>
-  <url>
-    <loc>/articles/MRS_DMR.html</loc>
-  </url>
-  <url>
-    <loc>/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>/authors.html</loc>
-  </url>
-  <url>
-    <loc>/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/MethParquet-package.html</loc>
-  </url>
-  <url>
-    <loc>/reference/NullModel.html</loc>
-  </url>
-  <url>
-    <loc>/reference/chrAnnotation.html</loc>
-  </url>
-  <url>
-    <loc>/reference/cpg_extract.html</loc>
-  </url>
-  <url>
-    <loc>/reference/create_methlist.html</loc>
-  </url>
-  <url>
-    <loc>/reference/create_methlist_S3.html</loc>
-  </url>
-  <url>
-    <loc>/reference/dev_meth_score.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ewas_bmi.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ewas_meth_exposure.html</loc>
-  </url>
-  <url>
-    <loc>/reference/flex_ewas.html</loc>
-  </url>
-  <url>
-    <loc>/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lm_ewas_outcome.html</loc>
-  </url>
-  <url>
-    <loc>/reference/phenoData.html</loc>
-  </url>
-  <url>
-    <loc>/reference/pipe.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plot_MethPheno.html</loc>
-  </url>
-  <url>
-    <loc>/reference/rlm_ewas_outcome.html</loc>
-  </url>
-  <url>
-    <loc>/reference/test_mrs.html</loc>
-  </url>
-  <url>
-    <loc>/reference/write_parquet_meth.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>/404.html</loc></url>
+<url><loc>/LICENSE-text.html</loc></url>
+<url><loc>/LICENSE.html</loc></url>
+<url><loc>/articles/Assoc-test.html</loc></url>
+<url><loc>/articles/MRS_DMR.html</loc></url>
+<url><loc>/articles/index.html</loc></url>
+<url><loc>/authors.html</loc></url>
+<url><loc>/index.html</loc></url>
+<url><loc>/reference/MethParquet-package.html</loc></url>
+<url><loc>/reference/NullModel.html</loc></url>
+<url><loc>/reference/chrAnnotation.html</loc></url>
+<url><loc>/reference/cpg_extract.html</loc></url>
+<url><loc>/reference/create_methlist.html</loc></url>
+<url><loc>/reference/create_methlist_S3.html</loc></url>
+<url><loc>/reference/dev_meth_score.html</loc></url>
+<url><loc>/reference/ewas_bmi.html</loc></url>
+<url><loc>/reference/ewas_meth_exposure.html</loc></url>
+<url><loc>/reference/flex_ewas.html</loc></url>
+<url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/lm_ewas_outcome.html</loc></url>
+<url><loc>/reference/phenoData.html</loc></url>
+<url><loc>/reference/pipe.html</loc></url>
+<url><loc>/reference/plot_MethPheno.html</loc></url>
+<url><loc>/reference/rlm_ewas_outcome.html</loc></url>
+<url><loc>/reference/test_mrs.html</loc></url>
+<url><loc>/reference/write_parquet_meth.html</loc></url>
 </urlset>
+
