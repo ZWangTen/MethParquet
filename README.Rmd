@@ -46,3 +46,6 @@ browseVignettes('MethParquet')
 
 ## Citation
 
+Wang, Z., Cassidy, M., Wallace, D. A., & Sofer, T. (2024). MethParquet: An R package for Rapid and efficient DNA methylation Association Analysis adopting Apache Parquet. *Bioinformatics*. https://doi.org/10.1093/bioinformatics/btae410 
+
+
